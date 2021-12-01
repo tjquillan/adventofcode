@@ -1,3 +1,12 @@
 # Advent of Code
 
-These are my solutions for [Advent of Code](https://adventofcode.com/)
+These my [Advent of Code](https://adventofcode.com/) solutions! Enjoy!
+
+This repository is set up so that I can solve each year in as many languages as
+I choose.
+
+## Years
+
+### 2021
+
+* [Python](2021/python)
