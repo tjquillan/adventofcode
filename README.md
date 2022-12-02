@@ -10,3 +10,7 @@ I choose.
 ### 2021
 
 * [Python](2021/python)
+
+### 2022
+
+* [Rust](2022/rust)
