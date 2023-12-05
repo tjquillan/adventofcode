@@ -32,12 +32,21 @@ std::size_t get_max_num_length() {
   return len;
 }
 
-std::optional<int> parse_int(std::string& str) {
-  const auto val = num_map.find(str);
-  if (val != num_map.cend()) {
-    return {val->second};
+void regress_match(std::string& str) {
+  while (!str.empty()) {
+    bool match = false;
+    for (const auto& entry : nums) {
+      if (entry.find(str) == 0) {
+        match = true;
+        break;
+      }
+    }
+    if (!match) {
+      str.erase(str.begin());
+    } else {
+      break;
+    }
   }
-  return {};
 }
 
 int main() {
@@ -68,24 +77,9 @@ int main() {
           if (first < 0) {
             first = last;
           }
-          // std::cout << num_str << '\n';
-          num_str.clear();
-        } else {
-          while (!num_str.empty()) {
-            bool match = false;
-            for (const auto& entry : nums) {
-              if (entry.find(num_str) == 0) {
-                match = true;
-                break;
-              }
-            }
-            if (!match) {
-              num_str.erase(num_str.begin());
-            } else {
-              break;
-            }
-          }
         }
+
+        regress_match(num_str);
       }
     }
 
