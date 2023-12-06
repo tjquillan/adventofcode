@@ -1,10 +1,8 @@
 #include <algorithm>
 #include <array>
 #include <cstddef>
-#include <format>
 #include <iostream>
 #include <map>
-#include <optional>
 #include <string>
 
 const std::map<std::string, char> num_map{
@@ -35,7 +33,7 @@ std::size_t get_max_num_length() {
 
 void regress_match(std::string& str) {
   while (!str.empty()) {
-    bool match = std::any_of(
+    const bool match = std::any_of(
         nums.begin(), nums.end(),
         [&str](const std::string& entry) { return entry.find(str) == 0; });
 
