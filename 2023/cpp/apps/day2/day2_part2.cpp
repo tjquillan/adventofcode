@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <format>
 #include <iostream>
+#include <numeric>
 #include <ranges>
 #include <string>
 #include <string_view>
@@ -48,9 +49,10 @@ int main() {
     games.push_back(cur_game);
   }
 
-  int pow_sum = 0;
-  for (const auto& entry : games) {
-    pow_sum += entry.red * entry.green * entry.blue;
-  }
+  const int pow_sum = std::accumulate(
+      games.begin(), games.end(), 0, [](int sum, const game& entry) {
+        return sum + (entry.red * entry.green * entry.blue);
+      });
+
   std::cout << pow_sum << '\n';
 }

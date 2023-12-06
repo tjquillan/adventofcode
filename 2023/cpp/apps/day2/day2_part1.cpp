@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <format>
 #include <iostream>
+#include <numeric>
 #include <ranges>
 #include <string>
 #include <string_view>
@@ -57,9 +58,9 @@ int main() {
     games.push_back(cur_game);
   }
 
-  int id_sum = 0;
-  for (const auto& entry : games) {
-    id_sum += entry.id;
-  }
+  const int id_sum = std::accumulate(
+      games.begin(), games.end(), 0,
+      [](int sum, const game& entry) { return sum + entry.id; });
+
   std::cout << id_sum << '\n';
 }

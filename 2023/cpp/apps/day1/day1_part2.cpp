@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <array>
 #include <cstddef>
 #include <format>
@@ -34,13 +35,10 @@ std::size_t get_max_num_length() {
 
 void regress_match(std::string& str) {
   while (!str.empty()) {
-    bool match = false;
-    for (const auto& entry : nums) {
-      if (entry.find(str) == 0) {
-        match = true;
-        break;
-      }
-    }
+    bool match = std::any_of(
+        nums.begin(), nums.end(),
+        [&str](const std::string& entry) { return entry.find(str) == 0; });
+
     if (!match) {
       str.erase(str.begin());
     } else {
@@ -82,8 +80,6 @@ int main() {
         regress_match(num_str);
       }
     }
-
-    std::cout << std::format("first: {}, last: {}\n", first, last);
 
     count += ((first - '0') * 10) + (last - '0');
     first = -1;

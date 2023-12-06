@@ -64,5 +64,23 @@ FetchContent_Declare(
   GIT_TAG eac40e8e7fcaf73f06ea2ffb8a1aaf34f90994f4)
 FetchContent_MakeAvailable(fmtlib scnlib)
 
+find_program(CPPCHECK_PROGRAM NAMES cppcheck)
+if(CPPCHECK_PROGRAM)
+  set(CMAKE_CXX_CPPCHECK "${CPPCHECK_PROGRAM}")
+  list(
+    APPEND
+    CMAKE_CXX_CPPCHECK
+    "--enable=all"
+    "--std=c++20"
+    "--inline-suppr"
+    "--cppcheck-build-dir=${PROJECT_BINARY_DIR}"
+    "--suppress=missingIncludeSystem"
+    "--suppress=unmatchedSuppression")
+  if(FETCHCONTENT_BASE_DIR)
+    list(APPEND CMAKE_CXX_CPPCHECK "-i${FETCHCONTENT_BASE_DIR}"
+         "--suppress=*:${FETCHCONTENT_BASE_DIR}/*")
+  endif()
+endif()
+
 # Include apps
 add_subdirectory(apps)
