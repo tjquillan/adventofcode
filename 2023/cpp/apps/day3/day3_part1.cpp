@@ -1,1 +1,5 @@
-int main() {}
+#include "scn/scn.h"
+
+int main() {
+
+}
