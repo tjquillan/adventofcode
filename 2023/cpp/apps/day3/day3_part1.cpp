@@ -10,13 +10,30 @@ constexpr bool is_num(char item) { return item >= '0' && item <= '9'; }
 
 constexpr bool is_symbol(char item) { return item != '.' && !is_num(item); }
 
+void check_adjacency(std::vector<std::vector<std::pair<char, bool>>>& field,
+                     std::size_t row, std::size_t col) {
+  auto& item = field[row][col];
+
+  const std::size_t col_base = col > 0 ? col - 1 : col;
+  const std::size_t row_base = row > 0 ? row - 1 : row;
+
+  for (std::size_t i = row_base; i <= row + 1 && i < field.size(); i++) {
+    for (std::size_t j = col_base; j <= col + 1 && j < field[row].size(); j++) {
+      if (is_symbol(field[i][j].first)) {
+        item.second = true;
+        break;
+      }
+    }
+  }
+}
+
 int main() {
   std::string line;
   std::vector<std::vector<std::pair<char, bool>>> field;
 
   // Build the field
   while (std::getline(std::cin, line)) {
-    field.emplace_back(line.length());
+    field.emplace_back();
     for (const auto& entry : line) {
       field.back().emplace_back(std::make_pair(entry, false));
     }
@@ -30,30 +47,7 @@ int main() {
       if (!is_num(item.first)) {
         continue;
       }
-      if (j > 0) {
-        item.second |= is_symbol(row[j - 1].first);
-      }
-      if (j < row.size() - 1) {
-        item.second |= is_symbol(row[j + 1].first);
-      }
-      if (i > 0) {
-        item.second |= is_symbol(field[i - 1][j].first);
-        if (j > 0) {
-          item.second |= is_symbol(field[i - 1][j - 1].first);
-        }
-        if (j < row.size() - 1) {
-          item.second |= is_symbol(field[i - 1][j + 1].first);
-        }
-      }
-      if (i < field.size() - 1) {
-        item.second |= is_symbol(field[i + 1][j].first);
-        if (j > 0) {
-          item.second |= is_symbol(field[i + 1][j - 1].first);
-        }
-        if (j < row.size() - 1) {
-          item.second |= is_symbol(field[i + 1][j + 1].first);
-        }
-      }
+      check_adjacency(field, i, j);
     }
   }
 
@@ -69,7 +63,6 @@ int main() {
       } else {
         if (adj) {
           sum += num;
-          fmt::println("{}", num);
         }
         num = 0;
         adj = false;
