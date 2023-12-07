@@ -66,8 +66,11 @@ int main() {
       if (is_num(item.first)) {
         num = (num * 10) + (item.first - '0');
         adj |= item.second;
-      } else if (adj) {  // If not a number, flush number if adjacent
-        sum += num;
+      } else {
+        if (adj) {
+          sum += num;
+          fmt::println("{}", num);
+        }
         num = 0;
         adj = false;
       }
