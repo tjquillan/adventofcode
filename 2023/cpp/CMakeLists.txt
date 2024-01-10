@@ -5,6 +5,8 @@ project(
   VERSION 0.1.0
   LANGUAGES C CXX)
 
+set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+
 # Export compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -41,16 +43,10 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 endif()
 
 # Enable clang-tidy
-find_program(CLANG_TIDY_PROGRAM NAMES "clang-tidy")
-set(CLANG_TIDY_COMMAND "${CLANG_TIDY_PROGRAM}")
+include(ClangTidy)
 
 # Enable CCache
-find_program(CCACHE_PROGRAM ccache)
-if(CCACHE_PROGRAM)
-  set(CMAKE_C_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
-  set(CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
-  set(CMAKE_CUDA_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
-endif()
+include(CCache)
 
 # Add dependencies
 include(FetchContent)
@@ -64,23 +60,7 @@ FetchContent_Declare(
   GIT_TAG eac40e8e7fcaf73f06ea2ffb8a1aaf34f90994f4)
 FetchContent_MakeAvailable(fmtlib scnlib)
 
-find_program(CPPCHECK_PROGRAM NAMES cppcheck)
-if(CPPCHECK_PROGRAM)
-  set(CMAKE_CXX_CPPCHECK "${CPPCHECK_PROGRAM}")
-  list(
-    APPEND
-    CMAKE_CXX_CPPCHECK
-    "--enable=all"
-    "--std=c++20"
-    "--inline-suppr"
-    "--cppcheck-build-dir=${PROJECT_BINARY_DIR}"
-    "--suppress=missingIncludeSystem"
-    "--suppress=unmatchedSuppression")
-  if(FETCHCONTENT_BASE_DIR)
-    list(APPEND CMAKE_CXX_CPPCHECK "-i${FETCHCONTENT_BASE_DIR}"
-         "--suppress=*:${FETCHCONTENT_BASE_DIR}/*")
-  endif()
-endif()
+include(Cppcheck)
 
 # Include apps
 add_subdirectory(apps)
